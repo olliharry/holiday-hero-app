@@ -1,0 +1,22 @@
+{
+  "node": {
+    "192481a2e68a349f40bddcb5719870a757b8bb41": {
+      "workers": {
+        "app/page": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22C%3A%5C%5CUsers%5C%5Cjulia%5C%5CDocuments%5C%5CReactApps%5C%5Choliday-hero%5C%5Capp%5C%5Ccomponents%5C%5CNavbar.tsx%22%2C%5B%22%24%24ACTION_0%22%5D%5D%2C%5B%22C%3A%5C%5CUsers%5C%5Cjulia%5C%5CDocuments%5C%5CReactApps%5C%5Choliday-hero%5C%5Capp%5C%5Ccomponents%5C%5CUserMenu.tsx%22%2C%5B%22%24%24ACTION_0%22%5D%5D%5D&__client_imported__=!"
+      },
+      "layer": {
+        "app/page": "rsc"
+      }
+    },
+    "131c528dec4a04b068faec29f6f4cdebefae1581": {
+      "workers": {
+        "app/page": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22C%3A%5C%5CUsers%5C%5Cjulia%5C%5CDocuments%5C%5CReactApps%5C%5Choliday-hero%5C%5Capp%5C%5Ccomponents%5C%5CNavbar.tsx%22%2C%5B%22%24%24ACTION_0%22%5D%5D%2C%5B%22C%3A%5C%5CUsers%5C%5Cjulia%5C%5CDocuments%5C%5CReactApps%5C%5Choliday-hero%5C%5Capp%5C%5Ccomponents%5C%5CUserMenu.tsx%22%2C%5B%22%24%24ACTION_0%22%5D%5D%5D&__client_imported__=!"
+      },
+      "layer": {
+        "app/page": "rsc"
+      }
+    }
+  },
+  "edge": {},
+  "encryptionKey": "htYSpviEmQCyLL2j7sJP8YUzrg53mJenD5mZPj0ZWOY="
+}
