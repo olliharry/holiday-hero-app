@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Oswald } from "next/font/google";
 import "./globals.css";
+import { SessionProvider } from "next-auth/react";
 
 //components
 import Navbar from "./components/Navbar";
@@ -26,8 +27,10 @@ export default function RootLayout({
         ></script>
       </head>
       <body className={inter.className}>
-        <Navbar />
-        {children}
+        <SessionProvider>
+          <Navbar />
+          {children}
+        </SessionProvider>
       </body>
     </html>
   );
