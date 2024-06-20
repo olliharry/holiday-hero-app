@@ -42,7 +42,7 @@ const PreferencesForm: React.FC = () => {
 
   return (
     <div className="max-w-lg mx-auto my-8 p-4 bg-primary shadow-md rounded-md">
-      <h2 className="text-2xl font-bold mb-4">Add Preferences</h2>
+      <h2 className="text-2xl font-bold mb-4">Create Preferences</h2>
       <form className="space-y-4" action={CreatePreference}>
         <div>
           <label className="block">
@@ -128,7 +128,7 @@ const PreferencesForm: React.FC = () => {
           type="submit"
           className="mt-4 inline-block px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring focus:ring-green-200 focus:ring-opacity-50"
         >
-          Submit Preferences
+          Create Preference
         </button>
       </form>
     </div>

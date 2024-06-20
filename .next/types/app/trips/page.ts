@@ -1,8 +1,8 @@
 // File: C:\Users\julia\Documents\ReactApps\holiday-hero\app\trips\page.tsx
-import * as entry from '../../../../app/trips/page.js'
+import * as entry from '../../../../app/itineraries/page.jsx'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
-type TEntry = typeof import('../../../../app/trips/page.js')
+type TEntry = typeof import('../../../../app/itineraries/page.jsx')
 
 // Check that the entry is a valid entry
 checkFields<Diff<{

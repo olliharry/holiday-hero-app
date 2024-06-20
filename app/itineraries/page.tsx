@@ -6,7 +6,7 @@ export default async function Trips() {
   const session = await auth();
   const user = session?.user;
   if (!user) {
-    redirect("/api/auth/signin?callbackUrl=/trips");
+    redirect("/api/auth/signin?callbackUrl=/itineraries");
   }
-  return <div>Trips</div>;
+  return <div>Itineraries</div>;
 }

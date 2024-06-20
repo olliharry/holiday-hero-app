@@ -34,6 +34,21 @@ export async function CreatePreference(formData: FormData){
     redirect("/");
 }
 
+export async function GetAllPreferences() { // Check is Logged in . Check has preference
+    const session = await auth();
+    if(!session?.user?.email){
+        return;
+    }
+    const currentUser = await prisma.user.findFirst({
+        where:{email: session?.user?.email},
+    })
+    const currentUserPreferences = await prisma.preference.findMany({
+        where:{userId: currentUser?.id},
+    })
+    const preferenceNames = currentUserPreferences.map(preference => preference.preferenceName);
+    return preferenceNames;
+}
+
 const PreferenceNameTaken = async(userEmail: string, newPreferenceName:string) => {
     const currentUser = await prisma.user.findFirst({
         where:{email: userEmail},

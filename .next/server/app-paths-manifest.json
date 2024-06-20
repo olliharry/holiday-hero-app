@@ -1,7 +1,6 @@
 {
   "/page": "app/page.js",
   "/prefrences/page": "app/prefrences/page.js",
-  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
-  "/help/page": "app/help/page.js",
-  "/trips/page": "app/trips/page.js"
+  "/itineraries/page": "app/itineraries/page.js",
+  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js"
 }

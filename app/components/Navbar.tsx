@@ -17,8 +17,8 @@ export default async function Navbar() {
         <Link href="/prefrences" className="buttonNavbar">
           My Prefrences
         </Link>
-        <Link href="/trips" className="buttonNavbar">
-          My Trips
+        <Link href="/itineraries" className="buttonNavbar">
+          My Itineraries
         </Link>
         <Link href="/help" className="buttonNavbar">
           help
