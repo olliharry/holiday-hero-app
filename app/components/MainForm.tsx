@@ -11,18 +11,14 @@ interface MainFormProps {
 
 const MainForm: React.FC<MainFormProps> = ({ preferenceNames }) => {
   const [location, setLocation] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
   const [radius, setRadius] = useState(20);
+  const [days, setDays] = useState(1);
 
-  const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleRadiusSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRadius(Number(e.target.value));
   };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    console.log("Form submitted:", { location, startDate, endDate });
+  const handleDaysSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDays(Number(e.target.value));
   };
 
   return (
@@ -55,15 +51,28 @@ const MainForm: React.FC<MainFormProps> = ({ preferenceNames }) => {
           ))}
         </select>
         <div>
+          {days > 1 && <p>{days} Days</p>}
+          {days == 1 && <p>{days} Day</p>}
+          <input
+            name="days"
+            type="range"
+            min={1}
+            max={7}
+            value={days}
+            className="range [--range-shdw:black]"
+            onChange={handleDaysSliderChange}
+          />
+        </div>
+        <div>
           <p>{radius} Km</p>
           <input
             name="radius"
             type="range"
-            min={5}
+            min={3}
             max={100}
             value={radius}
             className="range [--range-shdw:black]"
-            onChange={handleSliderChange}
+            onChange={handleRadiusSliderChange}
           />
         </div>
         <button
