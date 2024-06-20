@@ -26,6 +26,7 @@ const AutocompleteInput: React.FC<AutocompleteInputProps> = ({
 
   return (
     <input
+      name="location"
       required
       type="text"
       ref={inputRef}

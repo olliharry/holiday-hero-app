@@ -3,6 +3,7 @@ import { GoogleMap } from "@react-google-maps/api";
 import React, { useEffect, useRef } from "react";
 import { useState } from "react";
 import AutocompleteInput from "./AutoCompleteInput";
+import getPlace from "../actions/placesActions";
 
 interface MainFormProps {
   preferenceNames: string[];
@@ -29,7 +30,7 @@ const MainForm: React.FC<MainFormProps> = ({ preferenceNames }) => {
       <h2 className="text-2xl mb-4 font-bold text-gray-800">
         Create Itinerary
       </h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form action={getPlace} className="space-y-4">
         <div>
           <label
             htmlFor="location"
@@ -39,7 +40,11 @@ const MainForm: React.FC<MainFormProps> = ({ preferenceNames }) => {
           </label>
           <AutocompleteInput value={location} onChange={setLocation} />
         </div>
-        <select required className="select select-bordered w-full max-w-xs">
+        <select
+          name="preferenceName"
+          required
+          className="select select-bordered w-full max-w-xs"
+        >
           <option value="" disabled selected>
             select your Preference
           </option>
@@ -50,8 +55,9 @@ const MainForm: React.FC<MainFormProps> = ({ preferenceNames }) => {
           ))}
         </select>
         <div>
-          <p>{radius} Miles</p>
+          <p>{radius} Km</p>
           <input
+            name="radius"
             type="range"
             min={5}
             max={100}
@@ -60,43 +66,11 @@ const MainForm: React.FC<MainFormProps> = ({ preferenceNames }) => {
             onChange={handleSliderChange}
           />
         </div>
-        <div>
-          <label
-            htmlFor="startDate"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Start Date:
-          </label>
-          <input
-            type="date"
-            id="startDate"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-            required
-            className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-          />
-        </div>
-        <div>
-          <label
-            htmlFor="endDate"
-            className="block text-sm font-medium text-gray-700"
-          >
-            End Date:
-          </label>
-          <input
-            type="date"
-            id="endDate"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-            required
-            className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-          />
-        </div>
         <button
           type="submit"
           className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
-          Submit
+          Create Itinerary
         </button>
       </form>
     </div>
