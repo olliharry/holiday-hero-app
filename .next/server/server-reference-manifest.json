@@ -4,11 +4,13 @@
       "workers": {
         "app/page": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22C%3A%5C%5CUsers%5C%5Cjulia%5C%5CDocuments%5C%5CReactApps%5C%5Choliday-hero%5C%5Capp%5C%5Ccomponents%5C%5CNavbar.tsx%22%2C%5B%22%24%24ACTION_0%22%5D%5D%2C%5B%22C%3A%5C%5CUsers%5C%5Cjulia%5C%5CDocuments%5C%5CReactApps%5C%5Choliday-hero%5C%5Capp%5C%5Ccomponents%5C%5CUserMenu.tsx%22%2C%5B%22%24%24ACTION_0%22%5D%5D%5D&__client_imported__=!",
         "app/prefrences/page": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22C%3A%5C%5CUsers%5C%5Cjulia%5C%5CDocuments%5C%5CReactApps%5C%5Choliday-hero%5C%5Capp%5C%5Ccomponents%5C%5CNavbar.tsx%22%2C%5B%22%24%24ACTION_0%22%5D%5D%2C%5B%22C%3A%5C%5CUsers%5C%5Cjulia%5C%5CDocuments%5C%5CReactApps%5C%5Choliday-hero%5C%5Capp%5C%5Ccomponents%5C%5CUserMenu.tsx%22%2C%5B%22%24%24ACTION_0%22%5D%5D%5D&__client_imported__=!",
+        "app/help/page": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22C%3A%5C%5CUsers%5C%5Cjulia%5C%5CDocuments%5C%5CReactApps%5C%5Choliday-hero%5C%5Capp%5C%5Ccomponents%5C%5CNavbar.tsx%22%2C%5B%22%24%24ACTION_0%22%5D%5D%2C%5B%22C%3A%5C%5CUsers%5C%5Cjulia%5C%5CDocuments%5C%5CReactApps%5C%5Choliday-hero%5C%5Capp%5C%5Ccomponents%5C%5CUserMenu.tsx%22%2C%5B%22%24%24ACTION_0%22%5D%5D%5D&__client_imported__=!",
         "app/trips/page": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22C%3A%5C%5CUsers%5C%5Cjulia%5C%5CDocuments%5C%5CReactApps%5C%5Choliday-hero%5C%5Capp%5C%5Ccomponents%5C%5CNavbar.tsx%22%2C%5B%22%24%24ACTION_0%22%5D%5D%2C%5B%22C%3A%5C%5CUsers%5C%5Cjulia%5C%5CDocuments%5C%5CReactApps%5C%5Choliday-hero%5C%5Capp%5C%5Ccomponents%5C%5CUserMenu.tsx%22%2C%5B%22%24%24ACTION_0%22%5D%5D%5D&__client_imported__=!"
       },
       "layer": {
         "app/page": "rsc",
         "app/prefrences/page": "rsc",
+        "app/help/page": "rsc",
         "app/trips/page": "rsc"
       }
     },
@@ -16,11 +18,13 @@
       "workers": {
         "app/page": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22C%3A%5C%5CUsers%5C%5Cjulia%5C%5CDocuments%5C%5CReactApps%5C%5Choliday-hero%5C%5Capp%5C%5Ccomponents%5C%5CNavbar.tsx%22%2C%5B%22%24%24ACTION_0%22%5D%5D%2C%5B%22C%3A%5C%5CUsers%5C%5Cjulia%5C%5CDocuments%5C%5CReactApps%5C%5Choliday-hero%5C%5Capp%5C%5Ccomponents%5C%5CUserMenu.tsx%22%2C%5B%22%24%24ACTION_0%22%5D%5D%5D&__client_imported__=!",
         "app/prefrences/page": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22C%3A%5C%5CUsers%5C%5Cjulia%5C%5CDocuments%5C%5CReactApps%5C%5Choliday-hero%5C%5Capp%5C%5Ccomponents%5C%5CNavbar.tsx%22%2C%5B%22%24%24ACTION_0%22%5D%5D%2C%5B%22C%3A%5C%5CUsers%5C%5Cjulia%5C%5CDocuments%5C%5CReactApps%5C%5Choliday-hero%5C%5Capp%5C%5Ccomponents%5C%5CUserMenu.tsx%22%2C%5B%22%24%24ACTION_0%22%5D%5D%5D&__client_imported__=!",
+        "app/help/page": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22C%3A%5C%5CUsers%5C%5Cjulia%5C%5CDocuments%5C%5CReactApps%5C%5Choliday-hero%5C%5Capp%5C%5Ccomponents%5C%5CNavbar.tsx%22%2C%5B%22%24%24ACTION_0%22%5D%5D%2C%5B%22C%3A%5C%5CUsers%5C%5Cjulia%5C%5CDocuments%5C%5CReactApps%5C%5Choliday-hero%5C%5Capp%5C%5Ccomponents%5C%5CUserMenu.tsx%22%2C%5B%22%24%24ACTION_0%22%5D%5D%5D&__client_imported__=!",
         "app/trips/page": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22C%3A%5C%5CUsers%5C%5Cjulia%5C%5CDocuments%5C%5CReactApps%5C%5Choliday-hero%5C%5Capp%5C%5Ccomponents%5C%5CNavbar.tsx%22%2C%5B%22%24%24ACTION_0%22%5D%5D%2C%5B%22C%3A%5C%5CUsers%5C%5Cjulia%5C%5CDocuments%5C%5CReactApps%5C%5Choliday-hero%5C%5Capp%5C%5Ccomponents%5C%5CUserMenu.tsx%22%2C%5B%22%24%24ACTION_0%22%5D%5D%5D&__client_imported__=!"
       },
       "layer": {
         "app/page": "rsc",
         "app/prefrences/page": "rsc",
+        "app/help/page": "rsc",
         "app/trips/page": "rsc"
       }
     },
@@ -34,5 +38,5 @@
     }
   },
   "edge": {},
-  "encryptionKey": "5kJ4e6SOLiCj91M6HTmcdnUWtGmdQjGRopaKGeYsRJs="
+  "encryptionKey": "NVUK6qlhrKujlx2iQ4ReM4boY6YjKt2FJ3Bf01osckg="
 }

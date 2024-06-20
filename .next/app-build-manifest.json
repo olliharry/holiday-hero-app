@@ -16,6 +16,11 @@
       "static/chunks/main-app.js",
       "static/chunks/app/prefrences/page.js"
     ],
+    "/help/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/help/page.js"
+    ],
     "/trips/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
