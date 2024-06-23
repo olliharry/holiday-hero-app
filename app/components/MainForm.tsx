@@ -28,6 +28,19 @@ const MainForm: React.FC<MainFormProps> = ({ preferenceNames }) => {
       </h2>
       <form action={getPlace} className="space-y-4">
         <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Itinerary name:
+          </label>
+          <input
+            name="itineraryName"
+            type="text"
+            placeholder="Itinerary name"
+            className="input m-0"
+            required
+          />
+        </div>
+
+        <div>
           <label
             htmlFor="location"
             className="block text-sm font-medium text-gray-700"

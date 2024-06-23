@@ -23,6 +23,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   preferences   Preference[]
+  itineraries   Itinerary[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -35,6 +36,23 @@ model Preference {
   restaurants    String[]
   activities     String[]
   user           User     @relation(fields: [userId], references: [id])
+}
+
+model Itinerary {
+  id   String @id @default(cuid())
+  days Day[]
+  name String
+
+  User   User?   @relation(fields: [userId], references: [id])
+  userId String?
+}
+
+model Day {
+  id          String     @id @default(cuid())
+  activities  String
+  restaurants String
+  Itinerary   Itinerary? @relation(fields: [itineraryId], references: [id])
+  itineraryId String?
 }
 
 model Account {

@@ -33,7 +33,7 @@ const AutocompleteInput: React.FC<AutocompleteInputProps> = ({
       value={value}
       onChange={(e) => onChange(e.target.value)}
       placeholder="Enter a location"
-      className="w-full p-2 border rounded"
+      className="input input-bordered w-full max-w-xs"
     />
   );
 };
