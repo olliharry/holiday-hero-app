@@ -1,0 +1,43 @@
+export const activities = [
+    "beach lounging",
+    "biking",
+    "bird watching",
+    "camping",
+    "cooking class",
+    "exploring local cuisine",
+    "fishing",
+    "golfing",
+    "hiking",
+    "horseback riding",
+    "kayaking",
+    "meditation",
+    "museum tour",
+    "photography",
+    "picnicking",
+    "rock climbing",
+    "sailing",
+    "scuba diving",
+    "shopping",
+    "sightseeing",
+    "skiing",
+    "snorkeling",
+    "snowboarding",
+    "spa day",
+    "surfing",
+    "swimming",
+    "taking a guided tour",
+    "theater show",
+    "visiting amusement parks",
+    "visiting historical sites",
+    "visiting the zoo",
+    "wine tasting",
+    "yoga"
+  ];
+
+ export const restaurants = [
+    "American", "Barbecue", "Brazilian", "Buffet", "Burger", 
+    "Café", "Chinese", "Fast Food", "French", "Greek",
+    "Indian", "Italian", "Japanese", "Korean", "Mediterranean",
+    "Mexican", "Pizza", "Seafood", "Steakhouse", "Sushi",
+    "Thai", "Vegetarian/Vegan", "Vietnamese"
+  ];

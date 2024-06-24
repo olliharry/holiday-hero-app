@@ -2,11 +2,16 @@
 import React, { useState } from "react";
 import { useSession } from "next-auth/react";
 import { CreatePreference } from "../actions/actions";
+import SubmitButtonMainForm from "./submitButtonMainForm";
+import AlertWarning from "./alertWarning";
+import { useFormState } from "react-dom";
+import SelectMultiple from "./selectMultiple";
 
 const PreferencesForm: React.FC = () => {
   const [restaurants, setRestaurants] = useState<string[]>([""]);
   const [activities, setActivities] = useState<string[]>([""]);
   const [preferenceName, setPreferenceName] = useState<string>("");
+  const [error, action] = useFormState(CreatePreference, null);
 
   const handleAddRestaurant = () => {
     setRestaurants([...restaurants, ""]);
@@ -42,8 +47,9 @@ const PreferencesForm: React.FC = () => {
 
   return (
     <div className="max-w-lg mx-auto my-8 p-4 bg-primary shadow-md rounded-md">
+      {error && <AlertWarning warning={error}></AlertWarning>}
       <h2 className="text-2xl font-bold mb-4">Create Preferences</h2>
-      <form className="space-y-4" action={CreatePreference}>
+      <form className="space-y-4" action={action}>
         <div>
           <label className="block">
             Preference Name:
@@ -58,78 +64,10 @@ const PreferencesForm: React.FC = () => {
             />
           </label>
         </div>
-        <div>
-          <label className="block">
-            Restaurants:
-            {restaurants.map((restaurant, index) => (
-              <div key={index} className="flex items-center space-x-2 pb-1">
-                <input
-                  required
-                  placeholder="eg. Pizza, Burgers, breakfast, buffet, expensive"
-                  name="restaurants"
-                  type="text"
-                  className="flex-1 w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 outline-none"
-                  value={restaurant}
-                  onChange={(e) =>
-                    handleRestaurantChange(index, e.target.value)
-                  }
-                />
-                <button
-                  type="button"
-                  className="px-2 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:ring focus:ring-red-200 focus:ring-opacity-50"
-                  onClick={() => handleRemoveRestaurant(index)}
-                >
-                  Remove
-                </button>
-              </div>
-            ))}
-            <button
-              type="button"
-              className="mt-2 inline-block px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-              onClick={handleAddRestaurant}
-            >
-              Add Restaurant
-            </button>
-          </label>
-        </div>
-        <div>
-          <label className="block">
-            Activities:
-            {activities.map((activity, index) => (
-              <div key={index} className="flex items-center space-x-2 pb-1">
-                <input
-                  required
-                  placeholder="Swimming, Hiking, Museums, indoors, "
-                  name="activities"
-                  type="text"
-                  className="flex-1 w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 outline-none"
-                  value={activity}
-                  onChange={(e) => handleActivityChange(index, e.target.value)}
-                />
-                <button
-                  type="button"
-                  className="px-2 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:ring focus:ring-red-200 focus:ring-opacity-50"
-                  onClick={() => handleRemoveActivity(index)}
-                >
-                  Remove
-                </button>
-              </div>
-            ))}
-            <button
-              type="button"
-              className="mt-2 inline-block px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-              onClick={handleAddActivity}
-            >
-              Add Activity
-            </button>
-          </label>
-        </div>
-        <button
-          type="submit"
-          className="mt-4 inline-block px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring focus:ring-green-200 focus:ring-opacity-50"
-        >
-          Create Preference
-        </button>
+        
+        <SelectMultiple></SelectMultiple>
+        
+        <SubmitButtonMainForm title="Create Preference"></SubmitButtonMainForm>
       </form>
     </div>
   );

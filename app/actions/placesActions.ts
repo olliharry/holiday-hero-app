@@ -8,7 +8,7 @@ interface Preference{
     restaurants: string [],
 }
 
-export default async function getPlace(formData: FormData){
+export default async function getPlace(previousState:any, formData: FormData){
     const apiKey = process.env.NEXT_GOOGLE_MAPS_API_KEY;
     const preferenceName = formData.get("preferenceName") as string;
     const location = formData.get("location") as string;
@@ -18,6 +18,10 @@ export default async function getPlace(formData: FormData){
     
     let responseRestuarants = [];
     let responseActivities = [];
+
+    if(await doesItineraryExist(itineraryName)){
+        return 'Itinerary name taken!';
+    }
 
     const preference = await getPreference(preferenceName);
     if(preference?.activities == undefined || preference.restaurants == undefined) return;
@@ -33,8 +37,7 @@ export default async function getPlace(formData: FormData){
             `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${preference?.restaurants[i]}&location=${location}&radius=${radius}&key=${apiKey}`
         ))
     }
-    //ADD CHECK FOR ITINERARYNAME ALREADY IN USE!!
-    //create new itinerary for current user
+    
     const itinerary = await createItinerary(itineraryName);
 
     for (let i = 0; i < days; i++) {
@@ -46,6 +49,24 @@ export default async function getPlace(formData: FormData){
             }
         })
     }
+    return 'Successfully Created Itinerary!';
+}
+
+export async function doesItineraryExist(name: string) {
+    const user = await getUser();
+    const itinerary = await prisma.itinerary.findFirst({
+        where:{
+            name: name,
+            userId: user?.id
+        }
+    })
+    if(itinerary){
+        return true;
+    }
+    else{
+        return false;
+    }
+    
 }
 
 async function createItinerary(itineraryName:string) {

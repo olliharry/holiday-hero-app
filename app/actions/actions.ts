@@ -3,16 +3,14 @@ import prisma from "../lib/prisma"
 import { auth } from "@/auth"
 import { redirect } from "next/navigation";
 
-export async function CreatePreference(formData: FormData){
+export async function CreatePreference(previousState:any,formData: FormData){
     const session = await auth();
     if(!session?.user?.email){
-        alert("Not logged in!")
-        redirect("/home");
+        return 'Error!';
     }  
 
     if(await PreferenceNameTaken(session?.user?.email, formData.get("preferenceName") as string)){
-        alert("Preference name already taken")
-        redirect("/home");
+        return 'Preference Name Already In Use!'
     }
     
     const currentUser = await prisma.user.findFirst({
@@ -20,7 +18,7 @@ export async function CreatePreference(formData: FormData){
     })
 
     if(!currentUser){
-        redirect("/home");
+        return 'Error!';
     }
 
     const newPreference = await prisma.preference.create({
@@ -31,7 +29,7 @@ export async function CreatePreference(formData: FormData){
             restaurants: formData.getAll("restaurants") as string[],
         },
     })
-    redirect("/");
+    return 'Successfully Added Preference!'
 }
 
 export async function GetAllPreferences() { // Check is Logged in . Check has preference
