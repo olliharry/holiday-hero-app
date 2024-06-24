@@ -7,7 +7,7 @@ export default async function Home() {
   if (!preferenceNames) preferenceNames = [];
 
   return (
-    <main className="flex flex-col items-center ">
+    <main className="flex flex-col items-center">
       <MainForm preferenceNames={preferenceNames}></MainForm>
     </main>
   );

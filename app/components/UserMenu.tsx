@@ -5,11 +5,10 @@ import Link from "next/link";
 
 export default async function UserMenu() {
   const session = await auth();
-  
 
   return (
     <div className="flex items-center space-x-4">
-      <p>{session?.user?.name}</p>
+      <p className="ml-4">{session?.user?.name}</p>
 
       {session?.user?.image && (
         <Image
@@ -21,20 +20,15 @@ export default async function UserMenu() {
         />
       )}
       <div>
-        <Link href="/settings" className="buttonNavbar">
-          Account Settings
-        </Link>
         <form
           action={async () => {
             "use server";
             await signOut({ redirectTo: "/" });
           }}
         >
-          <button className="buttonNavbar">Sign Out</button>
+          <button className="btn">Sign Out</button>
         </form>
       </div>
     </div>
   );
 }
-
-

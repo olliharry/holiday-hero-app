@@ -8,45 +8,14 @@ import { useFormState } from "react-dom";
 import SelectMultiple from "./selectMultiple";
 
 const PreferencesForm: React.FC = () => {
-  const [restaurants, setRestaurants] = useState<string[]>([""]);
-  const [activities, setActivities] = useState<string[]>([""]);
   const [preferenceName, setPreferenceName] = useState<string>("");
   const [error, action] = useFormState(CreatePreference, null);
 
-  const handleAddRestaurant = () => {
-    setRestaurants([...restaurants, ""]);
-  };
-
-  const handleAddActivity = () => {
-    setActivities([...activities, ""]);
-  };
-
-  const handleRemoveRestaurant = (index: number) => {
-    const updatedRestaurants = [...restaurants];
-    updatedRestaurants.splice(index, 1);
-    setRestaurants(updatedRestaurants);
-  };
-
-  const handleRemoveActivity = (index: number) => {
-    const updatedActivities = [...activities];
-    updatedActivities.splice(index, 1);
-    setActivities(updatedActivities);
-  };
-
-  const handleRestaurantChange = (index: number, value: string) => {
-    const updatedRestaurants = [...restaurants];
-    updatedRestaurants[index] = value;
-    setRestaurants(updatedRestaurants);
-  };
-
-  const handleActivityChange = (index: number, value: string) => {
-    const updatedActivities = [...activities];
-    updatedActivities[index] = value;
-    setActivities(updatedActivities);
-  };
-
   return (
-    <div className="max-w-lg mx-auto my-8 p-4 bg-primary shadow-md rounded-md">
+    <div
+      className="max-w-lg mx-auto my-8 p-4 bg-primary shadow-2xl rounded-md"
+      data-theme="cupcake"
+    >
       {error && <AlertWarning warning={error}></AlertWarning>}
       <h2 className="text-2xl font-bold mb-4">Create Preferences</h2>
       <form className="space-y-4" action={action}>
@@ -64,9 +33,7 @@ const PreferencesForm: React.FC = () => {
             />
           </label>
         </div>
-        
         <SelectMultiple></SelectMultiple>
-        
         <SubmitButtonMainForm title="Create Preference"></SubmitButtonMainForm>
       </form>
     </div>

@@ -7,34 +7,33 @@ import UserMenu from "./UserMenu";
 export default async function Navbar() {
   const session = await auth();
   return (
-    <div className="flex justify-between items-center w-full h-24 bg-primary font-extrabold text-2xl">
-      <div>
-        <Link href="/" className="buttonNavbar">
-          HolidayHero
+    <div className="navbar bg-base-300 shadow-xl" data-theme="cupcake">
+      <div className="flex-1">
+        <Link href="/" className="btn text-xl">
+          Holiday Hero
         </Link>
       </div>
-      <div>
-        <Link href="/prefrences" className="buttonNavbar">
-          My Prefrences
-        </Link>
-        <Link href="/itineraries" className="buttonNavbar">
-          My Itineraries
-        </Link>
-        <Link href="/help" className="buttonNavbar">
-          help
-        </Link>
+      <div className="flex-none">
+        <ul className="menu menu-horizontal px-1">
+          <Link href="/prefrences" className="btn">
+            My Prefrences
+          </Link>
+          <Link href="/itineraries" className="btn">
+            My Itineraries
+          </Link>
+          {!session && (
+            <form
+              action={async () => {
+                "use server";
+                await signIn();
+              }}
+            >
+              <button className="btn">Sign In </button>
+            </form>
+          )}
+          {session && <UserMenu></UserMenu>}
+        </ul>
       </div>
-      {!session && (
-        <form
-          action={async () => {
-            "use server";
-            await signIn();
-          }}
-        >
-          <button className="buttonNavbar">Sign In </button>
-        </form>
-      )}
-      {session && <UserMenu></UserMenu>}
     </div>
   );
 }

@@ -47,6 +47,7 @@ export default function SelectMultiple() {
           {activitiesOptions.map((activity, index) => (
             <div key={index} className="form-control flex-row my-2">
               <input
+                name="activities"
                 type="checkbox"
                 id={activity}
                 value={activity}
@@ -73,6 +74,7 @@ export default function SelectMultiple() {
           {restaurantOptions.map((restaurant, index) => (
             <div key={index} className="form-control flex-row my-2">
               <input
+                name="restaurants"
                 type="checkbox"
                 id={restaurant}
                 value={restaurant}

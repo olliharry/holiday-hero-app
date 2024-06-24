@@ -1,26 +1,25 @@
 "use server"
 import prisma from "../lib/prisma"
 import { auth } from "@/auth"
-import { redirect } from "next/navigation";
 
 export async function CreatePreference(previousState:any,formData: FormData){
     const session = await auth();
     if(!session?.user?.email){
         return 'Error!';
     }  
-
+    if((formData.getAll("activities") as string[]).length < 4 || (formData.getAll("restaurants") as string[]).length < 4){
+        return 'Please enter at least 4 Restaurants and 4 Activites!';
+    }
+    
     if(await PreferenceNameTaken(session?.user?.email, formData.get("preferenceName") as string)){
         return 'Preference Name Already In Use!'
     }
-    
     const currentUser = await prisma.user.findFirst({
         where:{email: session?.user?.email},
     })
-
     if(!currentUser){
         return 'Error!';
     }
-
     const newPreference = await prisma.preference.create({
         data:{
             userId: currentUser?.id,
@@ -32,7 +31,7 @@ export async function CreatePreference(previousState:any,formData: FormData){
     return 'Successfully Added Preference!'
 }
 
-export async function GetAllPreferences() { // Check is Logged in . Check has preference
+export async function GetAllPreferences() {
     const session = await auth();
     if(!session?.user?.email){
         return;
