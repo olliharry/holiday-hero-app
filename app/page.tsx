@@ -1,9 +1,9 @@
 import prisma from "./lib/prisma";
 import MainForm from "./components/MainForm";
-import { GetAllPreferences } from "./actions/actions";
+import { GetAllPreferencesNames } from "./actions/actions";
 
 export default async function Home() {
-  var preferenceNames = await GetAllPreferences();
+  var preferenceNames = await GetAllPreferencesNames();
   if (!preferenceNames) preferenceNames = [];
 
   return (

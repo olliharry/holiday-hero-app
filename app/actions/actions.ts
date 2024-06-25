@@ -1,6 +1,7 @@
 "use server"
 import prisma from "../lib/prisma"
 import { auth } from "@/auth"
+import { revalidatePath } from "next/cache";
 
 export async function CreatePreference(previousState:any,formData: FormData){
     const session = await auth();
@@ -28,7 +29,34 @@ export async function CreatePreference(previousState:any,formData: FormData){
             restaurants: formData.getAll("restaurants") as string[],
         },
     })
+    revalidatePath("/prefrences");
     return 'Successfully Added Preference!'
+}
+
+export async function DeletePreference(preferenceId:string){
+    const user = await GetUser();
+    const deletePreference = await prisma.preference.delete({
+        where:{
+            id: preferenceId,
+            userId: user?.id,
+        }
+    })
+    revalidatePath("/prefrences");
+}
+
+export async function GetAllPreferencesNames() {
+    const session = await auth();
+    if(!session?.user?.email){
+        return;
+    }
+    const currentUser = await prisma.user.findFirst({
+        where:{email: session?.user?.email},
+    })
+    const currentUserPreferences = await prisma.preference.findMany({
+        where:{userId: currentUser?.id},
+    })
+    const preferenceNames = currentUserPreferences.map(preference => preference.preferenceName);
+    return preferenceNames;
 }
 
 export async function GetAllPreferences() {
@@ -42,8 +70,7 @@ export async function GetAllPreferences() {
     const currentUserPreferences = await prisma.preference.findMany({
         where:{userId: currentUser?.id},
     })
-    const preferenceNames = currentUserPreferences.map(preference => preference.preferenceName);
-    return preferenceNames;
+    return currentUserPreferences;
 }
 
 const PreferenceNameTaken = async(userEmail: string, newPreferenceName:string) => {
@@ -61,4 +88,15 @@ const PreferenceNameTaken = async(userEmail: string, newPreferenceName:string) =
         }
       }
     return false;
+}
+
+async function GetUser() {
+    const session = await auth();
+    if(!session?.user?.email){
+        return;
+    }
+    const user = await prisma.user.findFirst({
+        where:{email: session?.user?.email},
+    })
+    return user;
 }

@@ -7,7 +7,7 @@ interface Preference{
     activities: string[],
     restaurants: string [],
 }
-
+//https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&amp;key=YOUR_API_KEY
 export default async function getPlace(previousState:any, formData: FormData){
     const apiKey = process.env.NEXT_GOOGLE_MAPS_API_KEY;
     const preferenceName = formData.get("preferenceName") as string;
@@ -23,18 +23,23 @@ export default async function getPlace(previousState:any, formData: FormData){
         return 'Itinerary name taken!';
     }
 
+    const loc = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=${apiKey}`)
+    const lat = loc.data.results[0].geometry.location.lat;
+    const long = loc.data.results[0].geometry.location.lng;
+    
+
     const preference = await getPreference(preferenceName);
     if(preference?.activities == undefined || preference.restaurants == undefined) return;
     
 
     for(let i = 0; i < preference?.activities.length;i++){
         responseActivities.push(await axios.get(
-            `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${preference?.activities[i]}&location=${location}&radius=${radius}&key=${apiKey}`
+            `https://maps.googleapis.com/maps/api/place/textsearch/json?location=${lat}%2C${long}&query=${preference?.activities[i]}&radius=100000&key=${apiKey}`
         ))
     }
     for(let i = 0; i < preference?.restaurants.length;i++){
         responseRestuarants.push(await axios.get(
-            `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${preference?.restaurants[i]}&location=${location}&radius=${radius}&key=${apiKey}`
+            `https://maps.googleapis.com/maps/api/place/textsearch/json?location=${lat}%2C${long}&query=${preference?.restaurants[i]}&radius=${radius}&key=${apiKey}`
         ))
     }
     
@@ -51,6 +56,8 @@ export default async function getPlace(previousState:any, formData: FormData){
     }
     return 'Successfully Created Itinerary!';
 }
+
+
 
 export async function doesItineraryExist(name: string) {
     const user = await getUser();
