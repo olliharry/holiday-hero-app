@@ -2,12 +2,13 @@
 import axios, { Axios, AxiosResponse } from "axios";
 import prisma from "../lib/prisma";
 import { auth } from "@/auth";
+import { Sorts_Mill_Goudy } from "next/font/google";
 
 interface Preference{
     activities: string[],
     restaurants: string [],
 }
-//https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&amp;key=YOUR_API_KEY
+
 export default async function getPlace(previousState:any, formData: FormData){
     const apiKey = process.env.NEXT_GOOGLE_MAPS_API_KEY;
     const preferenceName = formData.get("preferenceName") as string;
@@ -18,6 +19,12 @@ export default async function getPlace(previousState:any, formData: FormData){
     
     let responseRestuarants = [];
     let responseActivities = [];
+    let sortedActivites = [];
+    let sortedRestuarants = [];
+    let actIteration = 0
+    let restIteration = 0;
+    let actNext = 0;
+    let restNext = 0;
 
     if(await doesItineraryExist(itineraryName)){
         return 'Itinerary name taken!';
@@ -36,24 +43,41 @@ export default async function getPlace(previousState:any, formData: FormData){
         responseActivities.push(await axios.get(
             `https://maps.googleapis.com/maps/api/place/textsearch/json?location=${lat}%2C${long}&query=${preference?.activities[i]}&radius=100000&key=${apiKey}`
         ))
+        sortedActivites.push(responseActivities[i].data.results.sort((a:any, b:any) => b.user_ratings_total - a.user_ratings_total))
     }
     for(let i = 0; i < preference?.restaurants.length;i++){
         responseRestuarants.push(await axios.get(
-            `https://maps.googleapis.com/maps/api/place/textsearch/json?location=${lat}%2C${long}&query=${preference?.restaurants[i]}&radius=${radius}&key=${apiKey}`
+            `https://maps.googleapis.com/maps/api/place/textsearch/json?location=${lat}%2C${long}&query=${preference?.restaurants[i]} food&radius=${radius}&key=${apiKey}`
         ))
+        sortedRestuarants.push(responseRestuarants[i].data.results.sort((a:any, b:any) => b.user_ratings_total - a.user_ratings_total))
     }
+
+    
     
     const itinerary = await createItinerary(itineraryName);
 
     for (let i = 0; i < days; i++) {
+        actIteration++;
+        restIteration++;
+        if(sortedActivites.length-1==i){
+            actIteration = 0;
+            actNext++;
+        }
+        if(sortedRestuarants.length-1==i){
+            restIteration = 0;
+            restNext++;
+        }
         await prisma.day.create({
             data:{
                 itineraryId: itinerary.id,
-                activities: responseActivities[i].data.results[0].name,
-                restaurants: responseRestuarants[i].data.results[0].name
+                activities: sortedActivites[actIteration][actNext].name,
+                activityAddress: sortedActivites[actIteration][actNext].formatted_address,
+                restaurants: sortedRestuarants[restIteration][restNext].name,
+                restaurantAddress: sortedRestuarants[restIteration][restNext].formatted_address,
             }
         })
     }
+
     return 'Successfully Created Itinerary!';
 }
 

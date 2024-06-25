@@ -48,11 +48,13 @@ model Itinerary {
 }
 
 model Day {
-  id          String     @id @default(cuid())
-  activities  String
-  restaurants String
-  Itinerary   Itinerary? @relation(fields: [itineraryId], references: [id])
-  itineraryId String?
+  id                String     @id @default(cuid())
+  activities        String
+  activityAddress   String
+  restaurants       String
+  restaurantAddress String
+  Itinerary         Itinerary? @relation(fields: [itineraryId], references: [id])
+  itineraryId       String?
 }
 
 model Account {

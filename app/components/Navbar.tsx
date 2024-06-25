@@ -15,12 +15,6 @@ export default async function Navbar() {
       </div>
       <div className="flex-none">
         <ul className="menu menu-horizontal px-1">
-          <Link href="/prefrences" className="btn">
-            My Prefrences
-          </Link>
-          <Link href="/itineraries" className="btn">
-            My Itineraries
-          </Link>
           {!session && (
             <form
               action={async () => {
@@ -30,6 +24,11 @@ export default async function Navbar() {
             >
               <button className="btn">Sign In </button>
             </form>
+          )}
+          {session && (
+            <Link href="/prefrences" className="btn">
+              My Prefrences
+            </Link>
           )}
           {session && <UserMenu></UserMenu>}
         </ul>
