@@ -15,7 +15,7 @@ const SubmitButtonMainForm: React.FC<props> = ({ title }) => {
         </button>
       )}
 
-      {pending && <p>Loading...</p>}
+      {pending && <span className="loading loading-spinner loading-lg"></span>}
     </div>
   );
 };

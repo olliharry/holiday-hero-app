@@ -1,50 +1,58 @@
 "use client";
 import React from "react";
-import { useState, useEffect } from "react";
-import { DeletePreference } from "../actions/actions";
-import { useTransition } from "react";
+import { useState, useTransition, useEffect } from "react";
+import { DeleteItinerary } from "../actions/actions";
+
+interface Day {
+  id: string;
+  activities: string;
+  activityAddress: string;
+  restaurants: string;
+  restaurantAddress: string;
+  itineraryId: string | null;
+}
+
+interface Itinerary {
+  id: string;
+  name: string;
+  userId: string | null;
+  days: Day[];
+}
 
 interface props {
-  preference:
-    | {
-        id: string;
-        userId: string;
-        preferenceName: string;
-        restaurants: string[];
-        activities: string[];
-      }[]
-    | undefined;
+  itineraries: Itinerary[];
 }
-const PreferencesList: React.FC<props> = ({ preference }) => {
-  const [userHasPreferences, setUserHasPreferences] = useState(false);
+
+const ItinerariesList: React.FC<props> = ({ itineraries }) => {
+  const [userHasItineraries, setUserHasItineraries] = useState(false);
   const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
-    if (preference && preference.length > 0) {
-      setUserHasPreferences(true);
+    if (itineraries && itineraries.length > 0) {
+      setUserHasItineraries(true);
     } else {
-      setUserHasPreferences(false);
+      setUserHasItineraries(false);
     }
-  }, [preference]);
+  }, [itineraries]);
 
   return (
     <div>
-      {userHasPreferences && (
+      {userHasItineraries && (
         <div
           className="max-w-lg mx-auto my-8 p-4 bg-primary shadow-2xl rounded-md flex flex-col items-center"
           data-theme="cupcake"
         >
-          {preference &&
-            preference?.map((p, index) => (
+          {itineraries &&
+            itineraries?.map((i, index) => (
               <div key={index} className="card bg-base-100 w-96 shadow-xl mb-4">
                 <div className="card-body">
                   <div className="flex justify-evenly">
-                    <h2 className="card-title">{p.preferenceName}</h2>
+                    <h2 className="card-title">{i.name}</h2>
                     {!isPending && (
                       <button
                         onClick={async () => {
                           startTransition(() => {
-                            DeletePreference(p.id);
+                            DeleteItinerary(i.id);
                           });
                         }}
                         className="btn btn-square btn-outline btn-error"
@@ -69,10 +77,15 @@ const PreferencesList: React.FC<props> = ({ preference }) => {
                       <span className="loading loading-spinner loading-xs"></span>
                     )}
                   </div>
-                  <p className="text-xl">Activities:</p>
-                  <p>{p.activities.join(",  ")}</p>
-                  <p className="text-xl">Restaurants:</p>
-                  <p>{p.restaurants.join(",  ")}</p>
+                  {i.days.map((d, indexDays) => (
+                    <div key={indexDays}>
+                      <p className="text-2xl">Day {indexDays + 1}</p>
+                      <p className="text-xl">Activity: {d.activities}</p>
+                      <p className="text-xs">Address: {d.activityAddress}</p>
+                      <p className="text-xl">Restaurant: {d.restaurants}</p>
+                      <p className="text-xs">Address: {d.restaurantAddress}</p>
+                    </div>
+                  ))}
                 </div>
               </div>
             ))}
@@ -82,4 +95,4 @@ const PreferencesList: React.FC<props> = ({ preference }) => {
   );
 };
 
-export default PreferencesList;
+export default ItinerariesList;

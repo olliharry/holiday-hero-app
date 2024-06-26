@@ -44,6 +44,22 @@ export async function DeletePreference(preferenceId:string){
     revalidatePath("/prefrences");
 }
 
+export async function DeleteItinerary(itineraryId:string){
+    const user = await GetUser();
+    await prisma.day.deleteMany({
+        where: {
+          itineraryId: itineraryId,
+        },
+      });
+    await prisma.itinerary.delete({
+        where:{
+            id: itineraryId,
+            userId: user?.id,
+        }
+    })
+    revalidatePath("/");
+}
+
 export async function GetAllPreferencesNames() {
     const session = await auth();
     if(!session?.user?.email){
@@ -59,14 +75,24 @@ export async function GetAllPreferencesNames() {
     return preferenceNames;
 }
 
+export async function GetAllItineraries() {
+    const currentUser = await GetUser();
+    const currentUserItineraries = await prisma.itinerary.findMany({
+        where:{userId: currentUser?.id},
+        include:{days: true},
+    })
+    return currentUserItineraries;
+}
+
 export async function GetAllPreferences() {
-    const session = await auth();
+    /*const session = await auth();
     if(!session?.user?.email){
         return;
     }
     const currentUser = await prisma.user.findFirst({
         where:{email: session?.user?.email},
-    })
+    })*/
+   const currentUser = await GetUser();
     const currentUserPreferences = await prisma.preference.findMany({
         where:{userId: currentUser?.id},
     })

@@ -2,7 +2,7 @@
 import axios, { Axios, AxiosResponse } from "axios";
 import prisma from "../lib/prisma";
 import { auth } from "@/auth";
-import { Sorts_Mill_Goudy } from "next/font/google";
+import { revalidatePath } from "next/cache";
 
 interface Preference{
     activities: string[],
@@ -77,7 +77,7 @@ export default async function getPlace(previousState:any, formData: FormData){
             }
         })
     }
-
+    revalidatePath("/");
     return 'Successfully Created Itinerary!';
 }
 
