@@ -5,6 +5,7 @@ interface AlertWarningProps {
 }
 
 const AlertWarning: React.FC<AlertWarningProps> = ({ warning }) => {
+  window.location.reload();
   return (
     <div role="alert" className="alert alert-warning">
       <svg

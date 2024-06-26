@@ -20,12 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        <script
-          async
-          src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_GOOGLE_MAPS_API_KEY}&loading=async&libraries=places`}
-        ></script>
-      </head>
+      <head></head>
       <body className={inter.className}>
         <SessionProvider>
           <Navbar />
@@ -35,3 +30,7 @@ export default function RootLayout({
     </html>
   );
 }
+/*<script
+          async
+          src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_GOOGLE_MAPS_API_KEY}&loading=async&libraries=places`}
+        ></script>*/

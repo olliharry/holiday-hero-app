@@ -6,6 +6,7 @@ import AutocompleteInput from "./AutoCompleteInput";
 import getPlace from "../actions/placesActions";
 import { useFormState, useFormStatus } from "react-dom";
 import AlertWarning from "./alertWarning";
+
 import Link from "next/link";
 import SubmitButtonMainForm from "./submitButtonMainForm";
 
@@ -55,39 +56,46 @@ const MainForm: React.FC<MainFormProps> = ({ preferenceNames }) => {
           </label>
           <AutocompleteInput value={location} onChange={setLocation} />
         </div>
-        <div className="flex">
-          <select
-            name="preferenceName"
-            required
-            className="select select-bordered w-full max-w-xs"
+        <div>
+          <label
+            htmlFor="location"
+            className="block text-sm font-medium text-gray-700"
           >
-            <option value="" disabled selected>
-              select your Preference
-            </option>
-            {preferenceNames.map((option, index) => (
-              <option key={index} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-          <Link href="/prefrences" className="btn btn-square btn-outline">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M12 4v16m8-8H4"
-              />
-            </svg>
-          </Link>
-        </div>
+            Preference:
+          </label>
 
+          <div className="flex">
+            <select
+              name="preferenceName"
+              required
+              className="select select-bordered w-full max-w-xs"
+              defaultValue="Select your Prefernce"
+            >
+              {preferenceNames.map((option, index) => (
+                <option key={index} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+
+            <Link href="/prefrences" className="btn btn-square btn-outline">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M12 4v16m8-8H4"
+                />
+              </svg>
+            </Link>
+          </div>
+        </div>
         <div>
           {days > 1 && <p>{days} Days</p>}
           {days == 1 && <p>{days} Day</p>}
