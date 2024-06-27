@@ -8,7 +8,8 @@ import { GetAllPreferences } from "../actions/actions";
 const Preferences = async () => {
   const session = await auth();
   const user = session?.user;
-  const preferences = await GetAllPreferences();
+  let preferences = await GetAllPreferences();
+  preferences = preferences.reverse();
   if (!user) {
     redirect("/api/auth/signin?callbackUrl=/prefrences");
   }

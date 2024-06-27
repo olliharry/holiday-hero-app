@@ -5,7 +5,13 @@ interface AlertWarningProps {
 }
 
 const AlertWarning: React.FC<AlertWarningProps> = ({ warning }) => {
-  window.location.reload();
+  if (
+    warning == "Successfully Created Itinerary!" ||
+    warning == "Itinerary created with less days due to lack of results!"
+  ) {
+    window.location.reload();
+  }
+
   return (
     <div role="alert" className="alert alert-warning">
       <svg

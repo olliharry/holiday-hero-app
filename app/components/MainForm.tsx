@@ -30,9 +30,18 @@ const MainForm: React.FC<MainFormProps> = ({ preferenceNames }) => {
   return (
     <div className="max-w-md mx-auto mt-10 p-6 bg-primary rounded-md shadow-md">
       {error && <AlertWarning warning={error}></AlertWarning>}
-      <h2 className="text-2xl mb-4 font-bold text-gray-800">
-        Create Itinerary
-      </h2>
+      <div className="flex">
+        <h2 className="text-2xl mb-4 font-bold text-gray-800">
+          Create Itinerary
+        </h2>
+        <div
+          className="tooltip tooltip-bottom"
+          data-tip="Get started by signing in and creating a new preference."
+        >
+          <button className="btn btn-xs mt-2 ml-2">?</button>
+        </div>
+      </div>
+
       <form action={action} className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700">
@@ -110,7 +119,16 @@ const MainForm: React.FC<MainFormProps> = ({ preferenceNames }) => {
           />
         </div>
         <div>
-          <p>{radius} Km</p>
+          <div className="flex">
+            <p>{radius} Km</p>
+            <div
+              className="tooltip tooltip-bottom"
+              data-tip="Prefer places within this radius from the given location, some may still be outside."
+            >
+              <button className="btn btn-xs ml-2">?</button>
+            </div>
+          </div>
+
           <input
             name="radius"
             type="range"

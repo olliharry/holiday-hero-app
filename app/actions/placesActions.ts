@@ -17,6 +17,7 @@ export default async function getPlace(previousState: any, formData: FormData) {
     const itineraryName = formData.get("itineraryName") as string;
     const radius = `${formData.get("radius")}000`;
     const days = parseInt(formData.get("days") as string);
+    let itinerary;
 
     let sortedActivites = [];
     let sortedRestuarants = [];
@@ -40,7 +41,7 @@ export default async function getPlace(previousState: any, formData: FormData) {
     // Helper function to create API request promises
     const createApiRequests = (items: string[], type: string) => {
       return items.map(item => axios.get(
-        `https://maps.googleapis.com/maps/api/place/textsearch/json?location=${lat},${long}&query=${item} ${type === 'restaurants' ? 'food' : ''}&radius=${radius}&key=${apiKey}`
+        `https://maps.googleapis.com/maps/api/place/textsearch/json?location=${lat},${long}&query=${item} ${type === 'restaurants' ? 'food' : 'activity'}&radius=${radius}&key=${apiKey}`
       ));
     };
   
@@ -53,19 +54,26 @@ export default async function getPlace(previousState: any, formData: FormData) {
     // Process responses
     sortedActivites = activityResponses.map(response => response.data.results.sort((a: any, b: any) => b.user_ratings_total - a.user_ratings_total));
     sortedRestuarants = restaurantResponses.map(response => response.data.results.sort((a: any, b: any) => b.user_ratings_total - a.user_ratings_total));
-  
-    const itinerary = await createItinerary(itineraryName);
+
+    if(sortedActivites[0][0] == undefined || sortedRestuarants[0][0] == undefined){
+        return 'Not enough results to create Itinerary!'
+    }
+    else{
+        itinerary = await createItinerary(itineraryName);
+    }
+    
   
     for (let i = 0; i < days; i++) {
-        actIteration++;
-        restIteration++;
-        if(sortedActivites.length-1==i){
+        if(sortedActivites.length==i){
             actIteration = 0;
             actNext++;
         }
-        if(sortedRestuarants.length-1==i){
+        if(sortedRestuarants.length==i){
             restIteration = 0;
             restNext++;
+        }
+        if(sortedActivites[actIteration][actNext] == undefined || sortedRestuarants[restIteration][restNext] == undefined){
+            return 'Itinerary created with less days due to lack of results!'
         }
         await prisma.day.create({
             data:{
@@ -76,6 +84,8 @@ export default async function getPlace(previousState: any, formData: FormData) {
                 restaurantAddress: sortedRestuarants[restIteration][restNext].formatted_address,
             }
         })
+        actIteration++;
+        restIteration++;
     }
       
     console.log("DONE!!")

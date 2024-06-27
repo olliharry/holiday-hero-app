@@ -33,7 +33,11 @@ const PreferencesForm: React.FC = () => {
             />
           </label>
         </div>
-        <SelectMultiple></SelectMultiple>
+        <div>
+          <p>Add a minimum of 4 Activites and 4 Restuarants. </p>
+          <SelectMultiple></SelectMultiple>
+        </div>
+
         <SubmitButtonMainForm title="Create Preference"></SubmitButtonMainForm>
       </form>
     </div>

@@ -3,12 +3,14 @@ import MainForm from "./components/MainForm";
 import ItinerariesList from "./components/itinerariesList";
 import { GetAllPreferencesNames, GetAllItineraries } from "./actions/actions";
 import { auth } from "@/auth";
+import { itxClientDenyList } from "@prisma/client/runtime/library";
 
 export default async function Home() {
   const session = await auth();
   var preferenceNames = await GetAllPreferencesNames();
   if (!preferenceNames) preferenceNames = [];
-  const itineraries = await GetAllItineraries();
+  let itineraries = await GetAllItineraries();
+  itineraries = itineraries.reverse();
 
   return (
     <main className="flex flex-col items-center">
