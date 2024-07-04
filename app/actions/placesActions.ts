@@ -2,8 +2,7 @@
 import axios, { Axios, AxiosResponse } from "axios";
 import prisma from "../lib/prisma";
 import { auth } from "@/auth";
-
-
+import { revalidatePath } from "next/cache";
 
 interface Preference{
     activities: string[],
@@ -15,18 +14,15 @@ export default async function getPlace(previousState: any, formData: FormData) {
     const preferenceName = formData.get("preferenceName") as string;
     const location = formData.get("location") as string;
     const itineraryName = formData.get("itineraryName") as string;
-    const radius = `${formData.get("radius")}000`;
+    const radius = parseInt(`${formData.get("radius")}000`);
+    
     const days = parseInt(formData.get("days") as string);
     let itinerary;
-
-    let sortedActivites = [];
-    let sortedRestuarants = [];
     let actIteration = 0
     let restIteration = 0;
     let actNext = 0;
     let restNext = 0;
-    
-  
+
     if (await doesItineraryExist(itineraryName)) {
       return 'Itinerary name taken!';
     }
@@ -34,134 +30,83 @@ export default async function getPlace(previousState: any, formData: FormData) {
     const loc = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=${apiKey}`);
     const lat = loc.data.results[0].geometry.location.lat;
     const long = loc.data.results[0].geometry.location.lng;
+
   
     const preference = await getPreference(preferenceName);
     if (!preference?.activities || !preference.restaurants) return;
   
-    // Helper function to create API request promises
-    const createApiRequests = (items: string[], type: string) => {
-      return items.map(item => axios.get(
-        `https://maps.googleapis.com/maps/api/place/textsearch/json?location=${lat},${long}&query=${item} ${type === 'restaurants' ? 'food' : 'activity'}&radius=${radius}&key=${apiKey}`
-      ));
+    const createRequestData = (type:string, lat:number, long:number, radius:number) => ({
+        includedPrimaryTypes: [type],
+        maxResultCount: 5,
+        locationRestriction: {
+        circle: {
+            center: {
+            latitude: lat,
+            longitude: long
+            },
+            radius: radius
+        }
+        }
+    });
+    
+    const headers = {
+        'Content-Type': 'application/json',
+        'X-Goog-Api-Key': apiKey,
+        'X-Goog-FieldMask': 'places.displayName,places.googleMapsUri'
     };
-  
-    // Concurrent API calls for activities and restaurant
+    
+    const activityRequests = preference.activities.map(activity => 
+        axios.post('https://places.googleapis.com/v1/places:searchNearby', createRequestData(activity, lat, long, radius), { headers })
+    );
+    
+    const restaurantRequests = preference.restaurants.map(restaurant => 
+        axios.post('https://places.googleapis.com/v1/places:searchNearby', createRequestData(restaurant, lat, long, radius), { headers })
+    );
+    
     const [activityResponses, restaurantResponses] = await Promise.all([
-      Promise.all(createApiRequests(preference.activities, 'activities')),
-      Promise.all(createApiRequests(preference.restaurants, 'restaurants'))
+        Promise.all(activityRequests),
+        Promise.all(restaurantRequests)
     ]);
-  
-    // Process responses
-    sortedActivites = activityResponses.map(response => response.data.results.sort((a: any, b: any) => b.user_ratings_total - a.user_ratings_total));
-    sortedRestuarants = restaurantResponses.map(response => response.data.results.sort((a: any, b: any) => b.user_ratings_total - a.user_ratings_total));
-
-    if(sortedActivites[0][0] == undefined || sortedRestuarants[0][0] == undefined){
-        return 'Not enough results to create Itinerary!'
-    }
-    else{
+    console.log(activityResponses[0].data);
+          
+    if(activityResponses[0].data.places==undefined||restaurantResponses[0].data.places==undefined){
+        return 'No places found. Increase the radius.'
+    }else{
         itinerary = await createItinerary(itineraryName);
     }
     
-  
-    for (let i = 0; i < days; i++) {
-        if(sortedActivites.length==i){
-            actIteration = 0;
-            actNext++;
-        }
-        if(sortedRestuarants.length==i){
-            restIteration = 0;
-            restNext++;
-        }
-        if(sortedActivites[actIteration][actNext] == undefined || sortedRestuarants[restIteration][restNext] == undefined){
-            return 'Itinerary created with less days due to lack of results!'
-        }
-        await prisma.day.create({
-            data:{
-                itineraryId: itinerary.id,
-                activities: sortedActivites[actIteration][actNext].name,
-                activityAddress: sortedActivites[actIteration][actNext].formatted_address,
-                restaurants: sortedRestuarants[restIteration][restNext].name,
-                restaurantAddress: sortedRestuarants[restIteration][restNext].formatted_address,
+    
+    try{
+        for (let i = 0; i < days; i++) {
+            if(activityResponses.length==i){
+                actIteration = 0;
+                actNext++;
             }
-        })
-        actIteration++;
-        restIteration++;
-    }
-      
+            if(restaurantResponses.length==i){
+                restIteration = 0;
+                restNext++;
+            }
+            if(activityResponses[actIteration].data.places[actNext] == undefined || restaurantResponses[restIteration].data.places[restNext] == undefined){
+                return 'Itinerary created with less days due to lack of results! Increase the search radius!'
+            }
+            await prisma.day.create({
+                data:{
+                    itineraryId: itinerary.id,
+                    activities: activityResponses[actIteration].data.places[actNext].displayName.text,
+                    activityAddress: activityResponses[actIteration].data.places[actNext].googleMapsUri,
+                    restaurants: restaurantResponses[restIteration].data.places[restNext].displayName.text,
+                    restaurantAddress: restaurantResponses[restIteration].data.places[restNext].googleMapsUri,
+                }
+            })
+            actIteration++;
+            restIteration++;
+        }
+    }catch(error){
+        return 'Itinerary created with less days due to lack of results! Increase the search radius!';
+    } 
     console.log("DONE!!")
-    //revalidatePath("/");
     return 'Successfully Created Itinerary!';
   }
-
-/*export async function getPlaceold(previousState:any, formData: FormData){
-    const apiKey = process.env.NEXT_GOOGLE_MAPS_API_KEY;
-    const preferenceName = formData.get("preferenceName") as string;
-    const location = formData.get("location") as string;
-    const itineraryName = formData.get("itineraryName") as string;
-    const radius = `${formData.get("radius")}000`; 
-    const days = parseInt(formData.get("days") as string);
-    
-    let responseRestuarants = [];
-    let responseActivities = [];
-    let sortedActivites = [];
-    let sortedRestuarants = [];
-    let actIteration = 0
-    let restIteration = 0;
-    let actNext = 0;
-    let restNext = 0;
-
-    if(await doesItineraryExist(itineraryName)){
-        return 'Itinerary name taken!';
-    }
-
-    const loc = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=${apiKey}`)
-    const lat = loc.data.results[0].geometry.location.lat;
-    const long = loc.data.results[0].geometry.location.lng;
-    
-
-    const preference = await getPreference(preferenceName);
-    if(preference?.activities == undefined || preference.restaurants == undefined) return;
-    
-
-    for(let i = 0; i < preference?.activities.length;i++){
-        responseActivities.push(await axios.get(
-            `https://maps.googleapis.com/maps/api/place/textsearch/json?location=${lat}%2C${long}&query=${preference?.activities[i]}&radius=100000&key=${apiKey}`
-        ))
-        sortedActivites.push(responseActivities[i].data.results.sort((a:any, b:any) => b.user_ratings_total - a.user_ratings_total))
-    }
-    for(let i = 0; i < preference?.restaurants.length;i++){
-        responseRestuarants.push(await axios.get(
-            `https://maps.googleapis.com/maps/api/place/textsearch/json?location=${lat}%2C${long}&query=${preference?.restaurants[i]} food&radius=${radius}&key=${apiKey}`
-        ))
-        sortedRestuarants.push(responseRestuarants[i].data.results.sort((a:any, b:any) => b.user_ratings_total - a.user_ratings_total))
-    }
-    
-    const itinerary = await createItinerary(itineraryName);
-
-    for (let i = 0; i < days; i++) {
-        actIteration++;
-        restIteration++;
-        if(sortedActivites.length-1==i){
-            actIteration = 0;
-            actNext++;
-        }
-        if(sortedRestuarants.length-1==i){
-            restIteration = 0;
-            restNext++;
-        }
-        await prisma.day.create({
-            data:{
-                itineraryId: itinerary.id,
-                activities: sortedActivites[actIteration][actNext].name,
-                activityAddress: sortedActivites[actIteration][actNext].formatted_address,
-                restaurants: sortedRestuarants[restIteration][restNext].name,
-                restaurantAddress: sortedRestuarants[restIteration][restNext].formatted_address,
-            }
-        })
-    }
-    revalidatePath("/");
-    return 'Successfully Created Itinerary!';
-}*/
 
 
 
@@ -231,15 +176,3 @@ export async function getGoogleApiKey() {
     return(process.env.NEXT_GOOGLE_MAPS_API_KEY || "undefined key");
 }
 
-/*for(let i = 0; i < preference?.activities.length;i++){
-        responseActivities.push(await axios.get(
-            `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${preference?.activities[i]}&inputtype=textquery&locationbias=circle%3A${radius}%${lat}%2C${long}&fields=formatted_address%2Cname%2Cuser_ratings_total&key=${apiKey}`
-        ))
-        sortedActivites.push(responseActivities[i].data.results.sort((a:any, b:any) => b.user_ratings_total - a.user_ratings_total))
-    }
-    for(let i = 0; i < preference?.restaurants.length;i++){
-        responseRestuarants.push(await axios.get(
-            `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${preference?.restaurants[i]}&inputtype=textquery&locationbias=circle%3A${radius}%${lat}%2C${long}&fields=formatted_address%2Cname%2Cuser_ratings_total&key=${apiKey}`
-        ))
-        sortedRestuarants.push(responseRestuarants[i].data.results.sort((a:any, b:any) => b.user_ratings_total - a.user_ratings_total))
-    }*/

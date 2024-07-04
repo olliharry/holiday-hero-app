@@ -81,9 +81,20 @@ const ItinerariesList: React.FC<props> = ({ itineraries }) => {
                     <div key={indexDays}>
                       <p className="text-2xl">Day {indexDays + 1}</p>
                       <p className="text-xl">Activity: {d.activities}</p>
-                      <p className="text-xs">Address: {d.activityAddress}</p>
+                      <a
+                        className="text-xs text-blue-600 underline"
+                        href={d.activityAddress}
+                      >
+                        {d.activityAddress}
+                      </a>
                       <p className="text-xl">Restaurant: {d.restaurants}</p>
-                      <p className="text-xs">Address: {d.restaurantAddress}</p>
+
+                      <a
+                        className="text-xs text-blue-600 underline"
+                        href={d.restaurantAddress}
+                      >
+                        {d.restaurantAddress}
+                      </a>
                     </div>
                   ))}
                 </div>

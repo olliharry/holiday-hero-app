@@ -21,5 +21,4 @@ export default async function Home() {
     </main>
   );
 }
-//?callbackUrl=https%3A%2F%2Fholiday-hero-app.vercel.app%2F
-//?callbackUrl=https%3A%2F%2Fholiday-hero-app.vercel.app%2F
+

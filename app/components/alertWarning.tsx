@@ -7,7 +7,8 @@ interface AlertWarningProps {
 const AlertWarning: React.FC<AlertWarningProps> = ({ warning }) => {
   if (
     warning == "Successfully Created Itinerary!" ||
-    warning == "Itinerary created with less days due to lack of results!"
+    warning ==
+      "Itinerary created with less days due to lack of results! Increase the search radius!"
   ) {
     window.location.reload();
   }
